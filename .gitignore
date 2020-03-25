@@ -4,3 +4,12 @@ bert-*
 *.pyc
 *.txt
 *.json
+*.gz
+*.tar
+*.zip
+*.tgz
+1/
+2/
+3/
+4/
+5/
