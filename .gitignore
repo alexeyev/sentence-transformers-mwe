@@ -1,0 +1,6 @@
+.idea
+bert-*
+*.xml
+*.pyc
+*.txt
+*.json
