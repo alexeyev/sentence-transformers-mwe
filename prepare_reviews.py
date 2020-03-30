@@ -5,12 +5,12 @@ from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 import sys
 
-if len(sys.argv) < 3:
+if len(sys.argv) < 2:
     print(sys.argv)
     print("Add an argument please")
     quit()
 
-FILEPATH = sys.argv[2]
+FILEPATH = sys.argv[-1]
 
 nltk.download('punkt')
 model = SentenceTransformer("./bert-base-nli-mean-tokens")
