@@ -6,6 +6,7 @@ from tqdm import tqdm
 import sys
 
 if len(sys.argv) < 3:
+    print(sys.argv)
     print("Add an argument please")
     quit()
 
