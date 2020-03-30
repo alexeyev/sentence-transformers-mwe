@@ -3,10 +3,17 @@ import nltk
 from nltk.tokenize import sent_tokenize
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
+import sys
+
+if len(sys.argv) < 3:
+    print("Add an argument please")
+    quit()
+
+FILEPATH = sys.argv[2]
 
 nltk.download('punkt')
 model = SentenceTransformer("./bert-base-nli-mean-tokens")
-FILEPATH = "food_reviews.txt"
+# FILEPATH = "food_reviews.txt"
 
 with open(FILEPATH, "r+", errors='ignore') as rf:
     with open(FILEPATH + ".reviews", "w+") as wtext:
