@@ -3,6 +3,7 @@ import nltk
 import pandas as pd
 from nltk.tokenize import sent_tokenize
 from tqdm import tqdm
+import csv
 
 nltk.download('punkt')
 
@@ -17,18 +18,16 @@ df = pd.read_csv("/media/data/datasets/yelp/food/ethnic_food_top10categories-shu
 
 new_df = [{}]
 
-for _, row in tqdm(df.iterrows()):
-    try:
-        sentences = split(row["text"])
-        for i, s in enumerate(sentences):
-            new_df[-1]["text"] = s
-            new_df[-1]["sentence_num"] = i + 1
-            new_df[-1]["food_categories"] = row["food_categories"]
-            new_df[-1]["review_id"] = row["review_id"]
-            new_df[-1]["user_id"] = row["user_id"]
-            new_df[-1]["business_id"] = row["business_id"]
-    except Exception as e:
-        print(e)
+with open("/media/data/datasets/yelp/food/ethnic_food_top10categories-splitted.csv", "w+") as wf:
 
-new_df = pd.DataFrame(new_df)
-new_df.to_csv("/media/data/datasets/yelp/food/ethnic_food_top10categories-splitted.csv")
+    csvw = csv.writer(wf)
+    csvw.writerow("business_id,user_id,review_id,food_categories,text,sentence_num".split(","))
+
+    for _, row in tqdm(df.iterrows()):
+        try:
+            sentences = split(row["text"])
+            for i, s in enumerate(sentences):
+                csvw.writerow([row["business_id"], row["user_id"], row["review_id"],
+                               row["food_categories"], s, i + 1])
+        except Exception as e:
+            print(e)
