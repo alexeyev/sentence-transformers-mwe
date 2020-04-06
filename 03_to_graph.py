@@ -25,7 +25,7 @@ except Exception as e:
     model = SentenceTransformer("./bert-base-nli-mean-tokens")
     sentence_embeddings = model.encode(sentences)
 
-available_colors = ["red", "green", "blue", "yellow", "white", "black", "magenta", "gray"]
+available_colors = ["green", "blue", "yellow", "gray", "black", "red", "magenta", "white"]
 categories_set = list(set(categories))
 cuisine2color = {cui: col for cui, col in zip(categories_set, available_colors)}
 
@@ -40,13 +40,13 @@ for idx, sentence in enumerate(sentences):
     r_id = review_ids[idx]
     nn_dist = distances[idx].A1
     similar_sentence_ids = nn_dist.nonzero()[0]
-    similar_sentence_rids = [(review_ids[i], nn_dist[i]) for i in similar_sentence_ids if review_ids[i] != r_id]
+    similar_sentence_rids = [(review_ids[i], nn_dist[i]) for i in similar_sentence_ids if review_ids[i] != r_id][:K]
     grouped_by_reviews[r_id].extend(similar_sentence_rids)
 
 for rid in grouped_by_reviews:
     closest = sorted(grouped_by_reviews[rid], key=lambda x: x[1], reverse=False)
     unique_closest = [(k, 1 - v) for k, v in closest]
-    grouped_by_reviews[rid] = unique_closest[:K]
+    grouped_by_reviews[rid] = unique_closest
 
 rid2review = {r: "" for r in review_ids}
 
@@ -58,9 +58,6 @@ print("Construction done. Plotting...")
 import networkx as nx
 import pylab as plt
 
-plt.figure(num=None, figsize=(50, 50))
-plt.axis('off')
-fig = plt.figure(1)
 
 G = nx.DiGraph()
 
@@ -74,8 +71,18 @@ for idx, rid in enumerate(review_ids):
         for other_rid, weight in grouped_by_reviews[rid]:
             G.add_edge(rid, other_rid, weight=weight)
 
-pos = nx.spring_layout(G)
-nx.draw_networkx(G, pos=pos, with_labels=True, node_size=500)
-# nx.draw_networkx_labels(G, pos, font_size=18,)
+print("Preparing layout...")
+pos = nx.spring_layout(G, iterations=10)
+
+plt.figure(num=None, figsize=(50, 50))
+plt.axis('off')
+fig = plt.figure(1)
+
+print("Actually drawing...")
+nx.draw_networkx(G, pos=pos, with_labels=True, node_size=100)
+
+nodes = list(G.nodes())
+node_colors = [G.nodes[n]["color"] for n in nodes]
+nx.draw_networkx_nodes(G, pos=pos, node_size=500, nodelist=nodes, node_color=node_colors)
 plt.savefig("labels.png", bbox_inches="tight")
 plt.close()

@@ -14,7 +14,6 @@ FILEPATH = sys.argv[-1]
 
 nltk.download('punkt')
 model = SentenceTransformer("./bert-base-nli-mean-tokens")
-# FILEPATH = "food_reviews.txt"
 
 with open(FILEPATH, "r+", errors='ignore') as rf:
     with open(FILEPATH + ".reviews", "w+") as wtext:
