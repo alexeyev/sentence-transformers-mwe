@@ -1,4 +1,5 @@
 import numpy as np
+from networkx import write_graphml, write_gml
 from nltk.tokenize import sent_tokenize
 from sentence_transformers import SentenceTransformer
 from sklearn.neighbors import kneighbors_graph
@@ -8,14 +9,14 @@ import pandas as pd
 from collections import defaultdict
 
 FILENAME = "ethnic_food_top10categories-vectorized.tsv"
-K = 1
+K = 2
 COSINE_DISTANCE_CUTOFF = 0.2
 REVIEWS_GROUPING = False
 REVIEWS_AGGREGATION = False
 
 try:
-    df = pd.read_csv(FILENAME, sep="\t")#.head(10000)
-    df = df[df["text"].str.len() < 50].head(1000)
+    df = pd.read_csv(FILENAME, sep="\t").head(20000)
+    # df = df[df["text"].str.len() < 50].head(1000)
     print(df.shape)
     print(df.text.head(100))
     # quit()
@@ -204,20 +205,22 @@ else:
         print("Preparing layout...")
         # pos = nx.spring_layout(G, iterations=50)
         # pos = nx.fruchterman_reingold_layout(G, iterations=120, k=1e-6)
-        pos = nx.spiral_layout(G)
-        pos = nx.spring_layout(G, pos=pos)
+        # pos = nx.spiral_layout(G)
+        # pos = nx.spring_layout(G, pos=pos)
 
-        plt.figure(num=None, figsize=(80, 80))
-        plt.axis('off')
-        fig = plt.figure(1)
+        # plt.figure(num=None, figsize=(80, 80))
+        # plt.axis('off')
+        # fig = plt.figure(1)
+        #
+        # print("Actually drawing...")
+        # nx.draw_networkx(G, pos=pos, with_labels=False)
+        #
+        # nodes = list(G.nodes())
+        # node_colors = [G.nodes[n]["color"] for n in nodes]
+        # node_labels = {n: G.nodes[n]["text"] for n in nodes}
+        # nx.draw_networkx_nodes(G, pos=pos, node_size=500, nodelist=nodes, node_color=node_colors)
+        # nx.draw_networkx_labels(G, pos=pos, labels=node_labels, font_size=6)
+        # plt.savefig("labels-sentences.png", bbox_inches="tight")
+        # plt.close()
 
-        print("Actually drawing...")
-        nx.draw_networkx(G, pos=pos, with_labels=False)
-
-        nodes = list(G.nodes())
-        node_colors = [G.nodes[n]["color"] for n in nodes]
-        node_labels = {n: G.nodes[n]["text"] for n in nodes}
-        nx.draw_networkx_nodes(G, pos=pos, node_size=500, nodelist=nodes, node_color=node_colors)
-        nx.draw_networkx_labels(G, pos=pos, labels=node_labels, font_size=6)
-        plt.savefig("labels-sentences.png", bbox_inches="tight")
-        plt.close()
+write_gml(G, "graph-sentences.gml", stringizer=str)
