@@ -9,6 +9,7 @@ km = MiniBatchKMeans(n_clusters=CLUSTERS, verbose=1, n_init=500, reassignment_ra
 
 sentence_embeddings = [np.array([float(a) for a in l.strip().split()])
                        for l in tqdm(open(FILENAME, "r", encoding="utf-8"))]
+sentence_embeddings = [a / np.linalg.norm(a) for a in sentence_embeddings]
 sentences = [l.strip() for l in tqdm(open(SENT_FILENAME, "r", encoding="utf-8"))]
 
 m = np.array(sentence_embeddings)
