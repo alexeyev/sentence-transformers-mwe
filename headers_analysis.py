@@ -8,7 +8,7 @@ from sklearn.neighbors import kneighbors_graph
 FILENAME = "vectors/titles_embeddings.txt"
 SENT_FILENAME = "vectors/titles.txt"
 K = 1
-COSINE_DISTANCE_CUTOFF = 0.9
+COSINE_DISTANCE_CUTOFF = 0.05
 SAMPLE = 60000
 
 try:
@@ -54,4 +54,4 @@ for idx in sentences2knn:
         for other_id, weight in sentences2knn[idx]:
             G.add_edge(idx, other_id, weight=weight)
 
-write_gml(G, "titles-graph-sentences-%d.gml" % SAMPLE, stringizer=str)
+write_gml(G, "titles-graph-sentences-k%d-cutoff%.2f-subset%d.gml" % (K, COSINE_DISTANCE_CUTOFF, SAMPLE), stringizer=str)
