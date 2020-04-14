@@ -7,7 +7,7 @@ from sklearn.neighbors import kneighbors_graph
 
 FILENAME = "vectors/titles_embeddings.txt"
 SENT_FILENAME = "vectors/titles.txt"
-K = 1
+K = 2
 COSINE_DISTANCE_CUTOFF = 0.05
 SAMPLE = 60000
 
@@ -24,7 +24,7 @@ except Exception as e:
     sentence_embeddings = model.encode(sentences)
 
 print("Graph construction...")
-distances = kneighbors_graph(sentence_embeddings, n_neighbors=K * 3, mode="distance",
+distances = kneighbors_graph(sentence_embeddings, n_neighbors=K, mode="distance",
                              include_self=False, n_jobs=6, metric="cosine")
 print("Conversion...")
 distances = distances.todense()
