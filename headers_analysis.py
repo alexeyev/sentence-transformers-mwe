@@ -7,13 +7,14 @@ from sklearn.neighbors import kneighbors_graph
 
 FILENAME = "vectors/titles_embeddings.txt"
 SENT_FILENAME = "vectors/titles.txt"
-K = 2
-COSINE_DISTANCE_CUTOFF = 0.2
+K = 1
+COSINE_DISTANCE_CUTOFF = 0.9
+SAMPLE = 60000
 
 try:
     sentence_embeddings = [np.array([float(a) for a in l.strip().split()])
-                           for l in open(FILENAME, "r", encoding="utf-8").readlines()][:10000]
-    sentences = [l.strip() for l in open(SENT_FILENAME, "r", encoding="utf-8").readlines()][:10000]
+                           for l in open(FILENAME, "r", encoding="utf-8").readlines()][:SAMPLE]
+    sentences = [l.strip() for l in open(SENT_FILENAME, "r", encoding="utf-8").readlines()][:SAMPLE]
 except Exception as e:
     print(e)
     quit()
@@ -53,4 +54,4 @@ for idx in sentences2knn:
         for other_id, weight in sentences2knn[idx]:
             G.add_edge(idx, other_id, weight=weight)
 
-write_gml(G, "titles-graph-sentences.gml", stringizer=str)
+write_gml(G, "titles-graph-sentences-%d.gml" % SAMPLE, stringizer=str)
