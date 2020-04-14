@@ -7,8 +7,8 @@ from sklearn.neighbors import kneighbors_graph
 
 FILENAME = "vectors/titles_embeddings.txt"
 SENT_FILENAME = "vectors/titles.txt"
-K = 2
-COSINE_DISTANCE_CUTOFF = 0.05
+K = 3
+COSINE_DISTANCE_CUTOFF = 0.01
 SAMPLE = 60000
 
 try:
